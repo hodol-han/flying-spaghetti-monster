@@ -17,12 +17,14 @@
 ## 설치 방법
 
 1. 저장소 클론
+
 ```bash
 git clone https://github.com/yourusername/crazy-idea-app.git
 cd crazy-idea-app
 ```
 
 2. 의존성 설치
+
 ```bash
 npm install
 # 또는
@@ -30,6 +32,7 @@ yarn install
 ```
 
 3. 개발 서버 실행
+
 ```bash
 npm run dev
 # 또는
@@ -46,4 +49,4 @@ yarn dev
 
 ## 라이센스
 
-MIT 
+MIT

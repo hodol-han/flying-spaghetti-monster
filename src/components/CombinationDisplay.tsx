@@ -16,4 +16,4 @@ export default function CombinationDisplay({ combination }: CombinationDisplayPr
       </div>
     </div>
   );
-} 
+}

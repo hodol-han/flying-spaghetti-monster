@@ -8,7 +8,9 @@ import SavedCombinations from '@/components/SavedCombinations';
 
 export default function Home() {
   const [currentCombination, setCurrentCombination] = useState<string | null>(null);
-  const [savedCombinations, setSavedCombinations] = useState<Array<{ combination: string; rating: number }>>([]);
+  const [savedCombinations, setSavedCombinations] = useState<
+    Array<{ combination: string; rating: number }>
+  >([]);
 
   const handleGenerateCombination = (combination: string) => {
     setCurrentCombination(combination);
@@ -30,7 +32,7 @@ export default function Home() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <FoodCombinationGenerator onGenerate={handleGenerateCombination} />
-          
+
           {currentCombination && (
             <>
               <CombinationDisplay combination={currentCombination} />
@@ -38,11 +40,11 @@ export default function Home() {
             </>
           )}
         </div>
-        
+
         <div>
           <SavedCombinations combinations={savedCombinations} />
         </div>
       </div>
     </div>
   );
-} 
+}

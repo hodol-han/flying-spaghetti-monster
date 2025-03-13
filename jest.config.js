@@ -13,10 +13,7 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
-  testPathIgnorePatterns: [
-    '<rootDir>/node_modules/',
-    '<rootDir>/.next/',
-  ],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',
@@ -27,4 +24,4 @@ const customJestConfig = {
 };
 
 // createJestConfig는 next/jest가 비동기 설정을 제공할 수 있도록 하는 함수입니다
-module.exports = createJestConfig(customJestConfig); 
+module.exports = createJestConfig(customJestConfig);

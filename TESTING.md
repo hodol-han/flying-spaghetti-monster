@@ -101,4 +101,4 @@ yarn test:coverage
 
 1. 테스트 파일 상단에 `import '@testing-library/jest-dom';`를 추가했는지 확인합니다.
 2. `tsconfig.json`에 `"types": ["jest", "@testing-library/jest-dom"]`가 포함되어 있는지 확인합니다.
-3. `src/types/jest-dom.d.ts` 파일이 존재하는지 확인합니다. 
+3. `src/types/jest-dom.d.ts` 파일이 존재하는지 확인합니다.

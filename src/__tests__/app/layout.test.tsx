@@ -17,13 +17,13 @@ describe('RootLayout Component', () => {
         <div data-testid="test-child">Test Child Content</div>
       </RootLayout>
     );
-    
+
     // Check if the child is rendered
     expect(container.querySelector('[data-testid="test-child"]')).toBeInTheDocument();
-    
+
     // Check if the font variable class is applied
     expect(container.querySelector('body')).toHaveClass('font-sans');
-    
+
     // Check if the main element exists
     expect(container.querySelector('main')).toBeInTheDocument();
     expect(container.querySelector('main')).toHaveClass('min-h-screen');
@@ -35,9 +35,9 @@ describe('RootLayout Component', () => {
         <div>Test Content</div>
       </RootLayout>
     );
-    
+
     // Check if html element has the correct lang attribute
     // In the testing environment, we need to check the container itself
     expect(container.querySelector('html')).toHaveAttribute('lang', 'ko');
   });
-}); 
+});
