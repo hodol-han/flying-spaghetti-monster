@@ -1,0 +1,98 @@
+{
+  "Korean": [
+    { "en": "Kimchi", "ko": "김치" },
+    { "en": "Bulgogi", "ko": "불고기" },
+    { "en": "Bibimbap", "ko": "비빔밥" },
+    { "en": "Tteokbokki", "ko": "떡볶이" },
+    { "en": "Kimbap", "ko": "김밥" },
+    { "en": "Doenjang Jjigae", "ko": "된장찌개" },
+    { "en": "Samgyeopsal", "ko": "삼겹살" },
+    { "en": "Naengmyeon", "ko": "냉면" },
+    { "en": "Sundubu Jjigae", "ko": "순두부찌개" },
+    { "en": "Galbitang", "ko": "갈비탕" }
+  ],
+  "Western": [
+    { "en": "Pizza", "ko": "피자" },
+    { "en": "Pasta", "ko": "파스타" },
+    { "en": "Hamburger", "ko": "햄버거" },
+    { "en": "Steak", "ko": "스테이크" },
+    { "en": "Salad", "ko": "샐러드" },
+    { "en": "Sandwich", "ko": "샌드위치" },
+    { "en": "Omelette", "ko": "오믈렛" },
+    { "en": "Risotto", "ko": "리소토" },
+    { "en": "Taco", "ko": "타코" },
+    { "en": "Hot Dog", "ko": "핫도그" }
+  ],
+  "Chinese": [
+    { "en": "Jajangmyeon", "ko": "짜장면" },
+    { "en": "Jjamppong", "ko": "짬뽕" },
+    { "en": "Sweet and Sour Pork", "ko": "탕수육" },
+    { "en": "Mapo Tofu", "ko": "마파두부" },
+    { "en": "Yangjangpi", "ko": "양장피" },
+    { "en": "Ganpoongi", "ko": "깐풍기" },
+    { "en": "Fried Rice", "ko": "볶음밥" },
+    { "en": "Dim Sum", "ko": "딤섬" },
+    { "en": "Malatang", "ko": "마라탕" },
+    { "en": "Hot Pot", "ko": "훠궈" }
+  ],
+  "Japanese": [
+    { "en": "Sushi", "ko": "초밥" },
+    { "en": "Ramen", "ko": "라멘" },
+    { "en": "Udon", "ko": "우동" },
+    { "en": "Tonkatsu", "ko": "돈까스" },
+    { "en": "Onigiri", "ko": "오니기리" },
+    { "en": "Tempura", "ko": "튀김" },
+    { "en": "Okonomiyaki", "ko": "오코노미야키" },
+    { "en": "Takoyaki", "ko": "타코야키" },
+    { "en": "Gyudon", "ko": "규동" },
+    { "en": "Nabe", "ko": "나베" }
+  ],
+  "Dessert": [
+    { "en": "Ice Cream", "ko": "아이스크림" },
+    { "en": "Cake", "ko": "케이크" },
+    { "en": "Cookie", "ko": "쿠키" },
+    { "en": "Macaron", "ko": "마카롱" },
+    { "en": "Pudding", "ko": "푸딩" },
+    { "en": "Chocolate", "ko": "초콜릿" },
+    { "en": "Jelly", "ko": "젤리" },
+    { "en": "Donut", "ko": "도넛" },
+    { "en": "Tart", "ko": "타르트" },
+    { "en": "Crepe", "ko": "크레페" }
+  ],
+  "Beverage": [
+    { "en": "Coffee", "ko": "커피" },
+    { "en": "Tea", "ko": "차" },
+    { "en": "Juice", "ko": "주스" },
+    { "en": "Smoothie", "ko": "스무디" },
+    { "en": "Soda", "ko": "탄산음료" },
+    { "en": "Beer", "ko": "맥주" },
+    { "en": "Wine", "ko": "와인" },
+    { "en": "Cocktail", "ko": "칵테일" },
+    { "en": "Milk", "ko": "우유" },
+    { "en": "Yogurt", "ko": "요거트" }
+  ],
+  "Condiment": [
+    { "en": "Salt", "ko": "소금" },
+    { "en": "Sugar", "ko": "설탕" },
+    { "en": "Pepper", "ko": "후추" },
+    { "en": "Soy Sauce", "ko": "간장" },
+    { "en": "Gochujang", "ko": "고추장" },
+    { "en": "Mayonnaise", "ko": "마요네즈" },
+    { "en": "Ketchup", "ko": "케첩" },
+    { "en": "Mustard", "ko": "머스타드" },
+    { "en": "Vinegar", "ko": "식초" },
+    { "en": "Olive Oil", "ko": "올리브 오일" }
+  ],
+  "Fruit": [
+    { "en": "Apple", "ko": "사과" },
+    { "en": "Banana", "ko": "바나나" },
+    { "en": "Strawberry", "ko": "딸기" },
+    { "en": "Grape", "ko": "포도" },
+    { "en": "Orange", "ko": "오렌지" },
+    { "en": "Kiwi", "ko": "키위" },
+    { "en": "Mango", "ko": "망고" },
+    { "en": "Pineapple", "ko": "파인애플" },
+    { "en": "Watermelon", "ko": "수박" },
+    { "en": "Peach", "ko": "복숭아" }
+  ]
+}

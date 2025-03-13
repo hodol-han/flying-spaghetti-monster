@@ -2,48 +2,90 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import SavedCombinations from '@/components/SavedCombinations';
 
-describe('SavedCombinations 컴포넌트', () => {
-  it('저장된 조합이 없을 때 안내 메시지를 표시해야 함', () => {
+// Mock next-intl
+jest.mock('next-intl', () => {
+  const getTranslations = () => {
+    return (key: string, params?: Record<string, any>) => {
+      const translations: Record<string, string> = {
+        'saved.title': 'Saved Food Combinations',
+        'saved.empty': 'No saved food combinations yet.',
+        'saved.suggestion': 'Generate and rate food combinations!',
+        'saved.combination': 'Combination #{number}',
+        'saved.rating': 'Rating: {rating}/5',
+      };
+
+      // Handle template strings with parameters
+      if (key === 'saved.combination' && params) {
+        return `Combination #${params.number}`;
+      }
+
+      if (key === 'saved.rating' && params) {
+        return `Rating: ${params.rating}/5`;
+      }
+
+      return translations[key as keyof typeof translations] || key;
+    };
+  };
+
+  return {
+    useTranslations: () => getTranslations(),
+    useLocale: () => 'en',
+  };
+});
+
+describe('SavedCombinations Component', () => {
+  it('should display empty state when no combinations are saved', () => {
     render(<SavedCombinations combinations={[]} />);
 
-    // 제목이 올바르게 표시되는지 확인
-    expect(screen.getByText('저장된 음식 조합')).toBeInTheDocument();
+    // Check if title is displayed
+    expect(screen.getByText('Saved Food Combinations')).toBeInTheDocument();
 
-    // 안내 메시지가 표시되는지 확인
-    expect(screen.getByText('아직 저장된 음식 조합이 없습니다.')).toBeInTheDocument();
-    expect(screen.getByText('음식 조합을 생성하고 평가해보세요!')).toBeInTheDocument();
+    // Check if empty state message is displayed
+    expect(screen.getByText('No saved food combinations yet.')).toBeInTheDocument();
+    expect(screen.getByText('Generate and rate food combinations!')).toBeInTheDocument();
   });
 
-  it('저장된 조합이 있을 때 목록을 표시해야 함', () => {
+  it('should display saved combinations when available', () => {
     const mockCombinations = [
-      { combination: '볶은 김치와(과) 초콜릿 아이스크림', rating: 4 },
-      { combination: '그라탕한 커피와(과) 김밥 젤리', rating: 2 },
+      { id: 1, combination: 'Fried kimchi and chocolate ice cream', rating: 4 },
+      { id: 2, combination: 'Gratin coffee and kimbap jelly', rating: 5 },
     ];
 
     render(<SavedCombinations combinations={mockCombinations} />);
 
-    // 각 조합이 표시되는지 확인
-    expect(screen.getByText('볶은 김치와(과) 초콜릿 아이스크림')).toBeInTheDocument();
-    expect(screen.getByText('그라탕한 커피와(과) 김밥 젤리')).toBeInTheDocument();
+    // Check if title is displayed
+    expect(screen.getByText('Saved Food Combinations')).toBeInTheDocument();
 
-    // 조합 번호가 표시되는지 확인
-    expect(screen.getByText('조합 #1')).toBeInTheDocument();
-    expect(screen.getByText('조합 #2')).toBeInTheDocument();
+    // Check if combinations are displayed
+    expect(screen.getByText('Combination #1')).toBeInTheDocument();
+    expect(screen.getByText('Fried kimchi and chocolate ice cream')).toBeInTheDocument();
+
+    // Check rating by title attribute instead of text content
+    expect(screen.getByTitle('Rating: 4/5')).toBeInTheDocument();
+    expect(screen.getByTitle('Rating: 4/5')).toHaveTextContent('😋');
+
+    expect(screen.getByText('Combination #2')).toBeInTheDocument();
+    expect(screen.getByText('Gratin coffee and kimbap jelly')).toBeInTheDocument();
+    expect(screen.getByTitle('Rating: 5/5')).toBeInTheDocument();
+    expect(screen.getByTitle('Rating: 5/5')).toHaveTextContent('🤩');
+
+    // Check if empty state message is not displayed
+    expect(screen.queryByText('No saved food combinations yet.')).not.toBeInTheDocument();
   });
 
-  it('평점에 따라 올바른 이모지가 표시되어야 함', () => {
+  it('should display correct emoji based on rating', () => {
     const mockCombinations = [
-      { combination: '조합 1', rating: 1 }, // 🤢
-      { combination: '조합 2', rating: 2 }, // 😕
-      { combination: '조합 3', rating: 3 }, // 😐
-      { combination: '조합 4', rating: 4 }, // 😋
-      { combination: '조합 5', rating: 5 }, // 🤩
+      { combination: 'Combination 1', rating: 1 }, // 🤢
+      { combination: 'Combination 2', rating: 2 }, // 😕
+      { combination: 'Combination 3', rating: 3 }, // 😐
+      { combination: 'Combination 4', rating: 4 }, // 😋
+      { combination: 'Combination 5', rating: 5 }, // 🤩
     ];
 
     render(<SavedCombinations combinations={mockCombinations} />);
 
-    // 각 평점에 맞는 이모지가 표시되는지 확인
-    const emojis = screen.getAllByTitle(/평점: \d\/5/);
+    // Check if each rating has the correct emoji
+    const emojis = screen.getAllByTitle(/Rating: \d\/5/);
     expect(emojis).toHaveLength(5);
 
     expect(emojis[0]).toHaveTextContent('🤢');
@@ -53,36 +95,36 @@ describe('SavedCombinations 컴포넌트', () => {
     expect(emojis[4]).toHaveTextContent('🤩');
   });
 
-  it('많은 수의 조합도 올바르게 표시되어야 함', () => {
+  it('should display many combinations correctly', () => {
     const mockCombinations = Array.from({ length: 10 }, (_, i) => ({
-      combination: `테스트 조합 ${i + 1}`,
+      combination: `Test combination ${i + 1}`,
       rating: (i % 5) + 1,
     }));
 
     render(<SavedCombinations combinations={mockCombinations} />);
 
-    // 모든 조합이 표시되는지 확인
+    // Check if all combinations are displayed
     mockCombinations.forEach((item, index) => {
-      expect(screen.getByText(`테스트 조합 ${index + 1}`)).toBeInTheDocument();
-      expect(screen.getByText(`조합 #${index + 1}`)).toBeInTheDocument();
+      expect(screen.getByText(`Test combination ${index + 1}`)).toBeInTheDocument();
+      expect(screen.getByText(`Combination #${index + 1}`)).toBeInTheDocument();
     });
   });
 
-  it('유효하지 않은 평점에 대해 물음표 이모지를 표시해야 함', () => {
-    // 유효하지 않은 평점(0, 6)을 가진 조합 추가
+  it('should display question mark emoji for invalid ratings', () => {
+    // Add combinations with invalid ratings (0, 6)
     const mockCombinations = [
-      { combination: '유효하지 않은 평점 0', rating: 0 },
-      { combination: '유효하지 않은 평점 6', rating: 6 },
+      { combination: 'Invalid rating 0', rating: 0 },
+      { combination: 'Invalid rating 6', rating: 6 },
     ];
 
     render(<SavedCombinations combinations={mockCombinations} />);
 
-    // 물음표 이모지가 표시되는지 확인
+    // Check if question mark emoji is displayed
     const items = screen.getAllByText('❓');
     expect(items).toHaveLength(2);
 
-    // 조합 텍스트가 올바르게 표시되는지 확인
-    expect(screen.getByText('유효하지 않은 평점 0')).toBeInTheDocument();
-    expect(screen.getByText('유효하지 않은 평점 6')).toBeInTheDocument();
+    // Check if combination text is displayed correctly
+    expect(screen.getByText('Invalid rating 0')).toBeInTheDocument();
+    expect(screen.getByText('Invalid rating 6')).toBeInTheDocument();
   });
 });

@@ -1,0 +1,17 @@
+[
+  { "en": "Stir-fried", "ko": "볶은" },
+  { "en": "Grilled", "ko": "구운" },
+  { "en": "Boiled", "ko": "삶은" },
+  { "en": "Fried", "ko": "튀긴" },
+  { "en": "Steamed", "ko": "찐" },
+  { "en": "Raw", "ko": "생" },
+  { "en": "Pickled", "ko": "절인" },
+  { "en": "Smoked", "ko": "훈제한" },
+  { "en": "Dried", "ko": "말린" },
+  { "en": "Fermented", "ko": "발효된" },
+  { "en": "Gratinated", "ko": "그라탕한" },
+  { "en": "Sous-vide", "ko": "수비드한" },
+  { "en": "Blended", "ko": "갈아낸" },
+  { "en": "Aged", "ko": "숙성된" },
+  { "en": "Caramelized", "ko": "캐러멜화된" }
+]

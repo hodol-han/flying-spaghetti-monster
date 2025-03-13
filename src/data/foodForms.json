@@ -1,0 +1,22 @@
+[
+  { "en": "Sauce", "ko": "소스" },
+  { "en": "Soup", "ko": "수프" },
+  { "en": "Salad", "ko": "샐러드" },
+  { "en": "Puree", "ko": "퓨레" },
+  { "en": "Mousse", "ko": "무스" },
+  { "en": "Jelly", "ko": "젤리" },
+  { "en": "Cream", "ko": "크림" },
+  { "en": "Powder", "ko": "가루" },
+  { "en": "Chips", "ko": "칩" },
+  { "en": "Roll", "ko": "롤" },
+  { "en": "Cake", "ko": "케이크" },
+  { "en": "Bread", "ko": "빵" },
+  { "en": "Pizza", "ko": "피자" },
+  { "en": "Pasta", "ko": "파스타" },
+  { "en": "Sandwich", "ko": "샌드위치" },
+  { "en": "Taco", "ko": "타코" },
+  { "en": "Burger", "ko": "버거" },
+  { "en": "Balls", "ko": "볼" },
+  { "en": "Sticks", "ko": "꼬치" },
+  { "en": "Ice Cream", "ko": "아이스크림" }
+]

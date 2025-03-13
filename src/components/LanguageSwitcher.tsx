@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import Link from 'next/link';
+import { locales } from '@/lib/navigation';
 
 export default function LanguageSwitcher() {
   const t = useTranslations('language');

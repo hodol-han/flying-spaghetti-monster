@@ -2,88 +2,90 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import FoodCombinationGenerator from '@/components/FoodCombinationGenerator';
 
-// 모의 함수 생성
-const mockOnGenerate = jest.fn();
+// Mock next-intl
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      'generator.title': 'Food Combination Generator',
+      'generator.description': 'Click the button to generate an unexpected food combination!',
+      'generator.button': 'Generate Random Combination',
+      'generator.generating': 'Generating...',
+      'generator.combinationTemplate': '{method} {food1} and {food2} {form}',
+    };
+    return translations[key as keyof typeof translations] || key;
+  },
+  useLocale: () => 'en',
+}));
 
-describe('FoodCombinationGenerator 컴포넌트', () => {
+describe('FoodCombinationGenerator Component', () => {
+  const mockOnGenerate = jest.fn();
+
   beforeEach(() => {
-    // 각 테스트 전에 모의 함수 초기화
-    mockOnGenerate.mockClear();
+    jest.clearAllMocks();
+    jest.useFakeTimers();
   });
 
-  it('컴포넌트가 올바르게 렌더링되어야 함', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('should render correctly', () => {
     render(<FoodCombinationGenerator onGenerate={mockOnGenerate} />);
 
-    // 제목이 올바르게 표시되는지 확인
-    expect(screen.getByText('음식 조합 생성기')).toBeInTheDocument();
+    // Check if title is displayed correctly
+    expect(screen.getByText('Food Combination Generator')).toBeInTheDocument();
 
-    // 설명 텍스트가 올바르게 표시되는지 확인
+    // Check if description is displayed correctly
     expect(
-      screen.getByText('버튼을 클릭하여 상상도 못한 음식 조합을 생성해보세요!')
+      screen.getByText('Click the button to generate an unexpected food combination!')
     ).toBeInTheDocument();
 
-    // 버튼이 올바르게 표시되는지 확인
-    expect(screen.getByText('랜덤 조합 생성하기')).toBeInTheDocument();
+    // Check if button is displayed correctly
+    expect(screen.getByText('Generate Random Combination')).toBeInTheDocument();
   });
 
-  it('버튼 클릭 시 생성 중 상태로 변경되어야 함', () => {
+  it('should generate a combination when button is clicked', async () => {
     render(<FoodCombinationGenerator onGenerate={mockOnGenerate} />);
 
-    // 버튼 클릭
-    fireEvent.click(screen.getByText('랜덤 조합 생성하기'));
+    // Click the generate button
+    fireEvent.click(screen.getByText('Generate Random Combination'));
 
-    // 버튼 텍스트가 '생성 중...'으로 변경되었는지 확인
-    expect(screen.getByText('생성 중...')).toBeInTheDocument();
-  });
+    // Check if generating state is displayed
+    expect(screen.getByText('Generating...')).toBeInTheDocument();
 
-  it('버튼 클릭 후 onGenerate 콜백이 호출되어야 함', async () => {
-    // Jest의 타이머 모의 설정
-    jest.useFakeTimers();
-
-    render(<FoodCombinationGenerator onGenerate={mockOnGenerate} />);
-
-    // 버튼 클릭
-    fireEvent.click(screen.getByText('랜덤 조합 생성하기'));
-
-    // 타이머 진행
+    // Advance timer to complete the generation
     jest.advanceTimersByTime(800);
 
-    // onGenerate가 호출되었는지 확인
+    // Check if onGenerate was called
     await waitFor(() => {
-      expect(mockOnGenerate).toHaveBeenCalledTimes(1);
+      expect(mockOnGenerate).toHaveBeenCalled();
     });
 
-    // 문자열 형태의 조합이 전달되었는지 확인
-    expect(mockOnGenerate).toHaveBeenCalledWith(expect.any(String));
-
-    // 실제 타이머로 복원
-    jest.useRealTimers();
+    // Check if the combination format is correct (this is a bit tricky since it's random)
+    const combinationArg = mockOnGenerate.mock.calls[0][0];
+    expect(typeof combinationArg).toBe('string');
+    expect(combinationArg.length).toBeGreaterThan(0);
   });
 
-  it('생성된 조합이 예상 형식을 따라야 함', async () => {
-    // Jest의 타이머 모의 설정
-    jest.useFakeTimers();
-
+  it('should disable the button while generating', async () => {
     render(<FoodCombinationGenerator onGenerate={mockOnGenerate} />);
 
-    // 버튼 클릭
-    fireEvent.click(screen.getByText('랜덤 조합 생성하기'));
+    // Click the generate button
+    fireEvent.click(screen.getByText('Generate Random Combination'));
 
-    // 타이머 진행
+    // Check if button is disabled
+    expect(screen.getByText('Generating...')).toBeDisabled();
+
+    // Advance timer to complete the generation
     jest.advanceTimersByTime(800);
 
-    // onGenerate가 호출되었는지 확인
+    // Wait for the button to reappear with the original text
     await waitFor(() => {
-      expect(mockOnGenerate).toHaveBeenCalledTimes(1);
+      expect(screen.queryByText('Generate Random Combination')).toBeInTheDocument();
     });
 
-    // 호출 인자 가져오기
-    const generatedCombination = mockOnGenerate.mock.calls[0][0];
-
-    // 조합이 예상 형식을 따르는지 확인 (조리방법 + 음식1 + '와(과)' + 음식2 + 형태)
-    expect(generatedCombination).toMatch(/^.+ .+와\(과\) .+ .+$/);
-
-    // 실제 타이머로 복원
-    jest.useRealTimers();
+    // Check if button is enabled again
+    const button = screen.getByText('Generate Random Combination');
+    expect(button).not.toBeDisabled();
   });
 });

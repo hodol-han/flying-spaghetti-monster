@@ -2,50 +2,62 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CombinationDisplay from '@/components/CombinationDisplay';
 
-describe('CombinationDisplay 컴포넌트', () => {
-  const mockCombination = '볶은 김치와(과) 초콜릿 아이스크림';
+// Mock next-intl
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      'display.title': 'Generated Food Combination',
+      'display.question':
+        'How does this food combination sound? Does it seem delicious or terrible?',
+    };
+    return translations[key as keyof typeof translations] || key;
+  },
+}));
 
-  it('컴포넌트가 올바르게 렌더링되어야 함', () => {
+describe('CombinationDisplay Component', () => {
+  const mockCombination = 'Fried kimchi and chocolate ice cream';
+
+  it('should render correctly', () => {
     render(<CombinationDisplay combination={mockCombination} />);
 
-    // 제목이 올바르게 표시되는지 확인
-    expect(screen.getByText('생성된 음식 조합')).toBeInTheDocument();
+    // Check if title is displayed correctly
+    expect(screen.getByText('Generated Food Combination')).toBeInTheDocument();
 
-    // 음식 조합이 올바르게 표시되는지 확인
+    // Check if food combination is displayed correctly
     expect(screen.getByText(mockCombination)).toBeInTheDocument();
 
-    // 안내 텍스트가 올바르게 표시되는지 확인
+    // Check if guidance text is displayed correctly
     expect(
-      screen.getByText('이 음식 조합은 어떤가요? 맛있을 것 같나요, 아니면 끔찍할 것 같나요?')
+      screen.getByText('How does this food combination sound? Does it seem delicious or terrible?')
     ).toBeInTheDocument();
   });
 
-  it('다른 조합으로 렌더링할 때 올바르게 업데이트되어야 함', () => {
+  it('should update correctly when rendered with a different combination', () => {
     const { rerender } = render(<CombinationDisplay combination={mockCombination} />);
 
-    // 초기 조합이 올바르게 표시되는지 확인
+    // Check if initial combination is displayed correctly
     expect(screen.getByText(mockCombination)).toBeInTheDocument();
 
-    // 새로운 조합
-    const newCombination = '그라탕한 커피와(과) 김밥 젤리';
+    // New combination
+    const newCombination = 'Gratin coffee and kimbap jelly';
 
-    // 컴포넌트 다시 렌더링
+    // Re-render component
     rerender(<CombinationDisplay combination={newCombination} />);
 
-    // 새로운 조합이 올바르게 표시되는지 확인
+    // Check if new combination is displayed correctly
     expect(screen.getByText(newCombination)).toBeInTheDocument();
 
-    // 이전 조합이 더 이상 표시되지 않는지 확인
+    // Check if previous combination is no longer displayed
     expect(screen.queryByText(mockCombination)).not.toBeInTheDocument();
   });
 
-  it('긴 조합 텍스트도 올바르게 표시되어야 함', () => {
+  it('should display long combination text correctly', () => {
     const longCombination =
-      '수비드한 마파두부와(과) 아이스크림 샌드위치를 블렌딩한 후 캐러멜라이즈한 특별한 디저트';
+      'Sous-vide mapo tofu and ice cream sandwich blended and caramelized special dessert';
 
     render(<CombinationDisplay combination={longCombination} />);
 
-    // 긴 조합이 올바르게 표시되는지 확인
+    // Check if long combination is displayed correctly
     expect(screen.getByText(longCombination)).toBeInTheDocument();
   });
 });
