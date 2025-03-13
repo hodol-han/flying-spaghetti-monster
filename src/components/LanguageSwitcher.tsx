@@ -2,8 +2,8 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
-import Link from 'next/link';
 import { locales } from '@/lib/navigation';
+import { Link } from '@/i18n/client';
 
 export default function LanguageSwitcher() {
   const t = useTranslations('language');
@@ -13,8 +13,6 @@ export default function LanguageSwitcher() {
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
-
-  const otherLocale = locale === 'en' ? 'ko' : 'en';
 
   return (
     <div className="relative">
@@ -46,26 +44,20 @@ export default function LanguageSwitcher() {
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            <Link
-              href={`/${locale === 'en' ? 'en' : 'ko'}`}
-              className={`block w-full text-left px-4 py-2 text-sm ${
-                locale === 'en' ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-              } hover:bg-gray-100 hover:text-gray-900`}
-              role="menuitem"
-              onClick={() => setIsOpen(false)}
-            >
-              {t('en')}
-            </Link>
-            <Link
-              href={`/${otherLocale}`}
-              className={`block w-full text-left px-4 py-2 text-sm ${
-                locale === 'ko' ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-              } hover:bg-gray-100 hover:text-gray-900`}
-              role="menuitem"
-              onClick={() => setIsOpen(false)}
-            >
-              {t('ko')}
-            </Link>
+            {locales.map(lang => (
+              <Link
+                key={lang}
+                href="/"
+                locale={lang}
+                className={`block w-full text-left px-4 py-2 text-sm ${
+                  locale === lang ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
+                } hover:bg-gray-100 hover:text-gray-900`}
+                role="menuitem"
+                onClick={() => setIsOpen(false)}
+              >
+                {t(lang)}
+              </Link>
+            ))}
           </div>
         </div>
       )}

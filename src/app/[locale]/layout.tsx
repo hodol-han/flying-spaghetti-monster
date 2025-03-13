@@ -5,7 +5,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const inter = Inter({ subsets: ['latin'] });
 
 export async function generateMetadata({
   params: { locale },
@@ -33,6 +33,11 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
+  // Validate that the incoming `locale` parameter is valid
+  const isValidLocale = ['en', 'ko'].includes(locale);
+  if (!isValidLocale) notFound();
+
+  // Get messages for the current locale
   let messages;
   try {
     messages = (await import(`../../../messages/${locale}.json`)).default;
@@ -42,12 +47,18 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${inter.variable} font-sans`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <div className="flex justify-end p-4">
-            <LanguageSwitcher />
-          </div>
-          <main className="min-h-screen">{children}</main>
+      <body className={inter.className}>
+        <NextIntlClientProvider locale={locale} messages={messages} timeZone="Asia/Seoul">
+          <header className="bg-primary text-white p-4">
+            <div className="container mx-auto flex justify-between items-center">
+              <h1 className="text-2xl font-bold">Flying Spaghetti Monster</h1>
+              <LanguageSwitcher />
+            </div>
+          </header>
+          <main className="min-h-screen container mx-auto py-8 px-4">{children}</main>
+          <footer className="bg-gray-100 p-4 text-center text-gray-600">
+            <p>&copy; 2023 Flying Spaghetti Monster</p>
+          </footer>
         </NextIntlClientProvider>
       </body>
     </html>
