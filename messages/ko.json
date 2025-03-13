@@ -8,6 +8,7 @@
     "description": "버튼을 클릭하여 상상도 못한 음식 조합을 생성해보세요!",
     "button": "랜덤 조합 생성하기",
     "generating": "생성 중...",
+    "loading": "데이터 로딩 중...",
     "combinationTemplate": "{method} {food1}와(과) {food2} {form}"
   },
   "display": {

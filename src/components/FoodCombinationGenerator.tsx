@@ -1,150 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 
-// Food items by category
-const foodItems = {
-  Korean: [
-    'Kimchi',
-    'Bulgogi',
-    'Bibimbap',
-    'Tteokbokki',
-    'Kimbap',
-    'Doenjang Jjigae',
-    'Samgyeopsal',
-    'Naengmyeon',
-    'Sundubu Jjigae',
-    'Galbitang',
-  ],
-  Western: [
-    'Pizza',
-    'Pasta',
-    'Hamburger',
-    'Steak',
-    'Salad',
-    'Sandwich',
-    'Omelette',
-    'Risotto',
-    'Taco',
-    'Hot Dog',
-  ],
-  Chinese: [
-    'Jajangmyeon',
-    'Jjamppong',
-    'Sweet and Sour Pork',
-    'Mapo Tofu',
-    'Yangjangpi',
-    'Ganpoongi',
-    'Fried Rice',
-    'Dim Sum',
-    'Malatang',
-    'Hot Pot',
-  ],
-  Japanese: [
-    'Sushi',
-    'Ramen',
-    'Udon',
-    'Tonkatsu',
-    'Onigiri',
-    'Tempura',
-    'Okonomiyaki',
-    'Takoyaki',
-    'Gyudon',
-    'Nabe',
-  ],
-  Dessert: [
-    'Ice Cream',
-    'Cake',
-    'Cookie',
-    'Macaron',
-    'Pudding',
-    'Chocolate',
-    'Jelly',
-    'Donut',
-    'Tart',
-    'Crepe',
-  ],
-  Beverage: [
-    'Coffee',
-    'Tea',
-    'Juice',
-    'Smoothie',
-    'Soda',
-    'Beer',
-    'Wine',
-    'Cocktail',
-    'Milk',
-    'Yogurt',
-  ],
-  Condiment: [
-    'Salt',
-    'Sugar',
-    'Pepper',
-    'Soy Sauce',
-    'Gochujang',
-    'Mayonnaise',
-    'Ketchup',
-    'Mustard',
-    'Vinegar',
-    'Olive Oil',
-  ],
-  Fruit: [
-    'Apple',
-    'Banana',
-    'Strawberry',
-    'Grape',
-    'Orange',
-    'Kiwi',
-    'Mango',
-    'Pineapple',
-    'Watermelon',
-    'Peach',
-  ],
-};
-
-// Cooking methods
-const cookingMethods = [
-  'Stir-fried',
-  'Grilled',
-  'Boiled',
-  'Fried',
-  'Steamed',
-  'Raw',
-  'Pickled',
-  'Smoked',
-  'Dried',
-  'Fermented',
-  'Gratinated',
-  'Sous-vide',
-  'Blended',
-  'Aged',
-  'Caramelized',
-];
-
-// Food forms
-const forms = [
-  'Sauce',
-  'Soup',
-  'Salad',
-  'Puree',
-  'Mousse',
-  'Jelly',
-  'Cream',
-  'Powder',
-  'Chips',
-  'Roll',
-  'Cake',
-  'Bread',
-  'Pizza',
-  'Pasta',
-  'Sandwich',
-  'Taco',
-  'Burger',
-  'Balls',
-  'Sticks',
-  'Ice Cream',
-];
+// Import data types
+import type { FoodItems, CookingMethods, FoodForms, LocalizedItem } from '@/types/food';
 
 interface FoodCombinationGeneratorProps {
   onGenerate: (combination: string) => void;
@@ -154,8 +14,41 @@ export default function FoodCombinationGenerator({ onGenerate }: FoodCombination
   const t = useTranslations();
   const locale = useLocale();
   const [isGenerating, setIsGenerating] = useState(false);
+  const [foodItems, setFoodItems] = useState<FoodItems>({});
+  const [cookingMethods, setCookingMethods] = useState<CookingMethods>([]);
+  const [forms, setForms] = useState<FoodForms>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load data from JSON files
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [foodItemsData, cookingMethodsData, foodFormsData] = await Promise.all([
+          import('@/data/foodItems.json').then(module => module.default),
+          import('@/data/cookingMethods.json').then(module => module.default),
+          import('@/data/foodForms.json').then(module => module.default),
+        ]);
+
+        setFoodItems(foodItemsData);
+        setCookingMethods(cookingMethodsData);
+        setForms(foodFormsData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error loading food data:', error);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  // Get localized text based on current locale
+  const getLocalizedText = (item: LocalizedItem): string => {
+    return locale === 'ko' ? item.ko : item.en;
+  };
 
   const generateRandomCombination = () => {
+    if (isLoading) return;
+
     setIsGenerating(true);
 
     // Select random categories
@@ -168,20 +61,26 @@ export default function FoodCombinationGenerator({ onGenerate }: FoodCombination
     const category2 = t(`foodCategories.${randomCategory2}`);
 
     // Select random food items
-    const randomFood1 =
+    const randomFoodItem1 =
       foodItems[randomCategory1 as keyof typeof foodItems][
         Math.floor(Math.random() * foodItems[randomCategory1 as keyof typeof foodItems].length)
       ];
-    const randomFood2 =
+    const randomFoodItem2 =
       foodItems[randomCategory2 as keyof typeof foodItems][
         Math.floor(Math.random() * foodItems[randomCategory2 as keyof typeof foodItems].length)
       ];
 
+    // Get localized food names
+    const randomFood1 = getLocalizedText(randomFoodItem1);
+    const randomFood2 = getLocalizedText(randomFoodItem2);
+
     // Select random cooking method
-    const randomMethod = cookingMethods[Math.floor(Math.random() * cookingMethods.length)];
+    const randomMethodItem = cookingMethods[Math.floor(Math.random() * cookingMethods.length)];
+    const randomMethod = getLocalizedText(randomMethodItem);
 
     // Select random form
-    const randomForm = forms[Math.floor(Math.random() * forms.length)];
+    const randomFormItem = forms[Math.floor(Math.random() * forms.length)];
+    const randomForm = getLocalizedText(randomFormItem);
 
     // Generate combination using template from translation file
     const combination = t('generator.combinationTemplate', {
@@ -205,12 +104,18 @@ export default function FoodCombinationGenerator({ onGenerate }: FoodCombination
 
       <button
         onClick={generateRandomCombination}
-        disabled={isGenerating}
+        disabled={isGenerating || isLoading}
         className={`w-full py-3 px-6 rounded-lg text-white font-bold transition-all ${
-          isGenerating ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-opacity-80'
+          isGenerating || isLoading
+            ? 'bg-gray-400 cursor-not-allowed'
+            : 'bg-primary hover:bg-opacity-80'
         }`}
       >
-        {isGenerating ? t('generator.generating') : t('generator.button')}
+        {isLoading
+          ? t('generator.loading')
+          : isGenerating
+            ? t('generator.generating')
+            : t('generator.button')}
       </button>
     </div>
   );

@@ -8,6 +8,7 @@
     "description": "Click the button to generate an unexpected food combination!",
     "button": "Generate Random Combination",
     "generating": "Generating...",
+    "loading": "Loading data...",
     "combinationTemplate": "{method} {food1} and {food2} {form}"
   },
   "display": {
