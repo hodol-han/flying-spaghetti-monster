@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations, useLocale } from 'next-intl';
 
 // Food items by category
 const foodItems = {
@@ -150,6 +151,8 @@ interface FoodCombinationGeneratorProps {
 }
 
 export default function FoodCombinationGenerator({ onGenerate }: FoodCombinationGeneratorProps) {
+  const t = useTranslations();
+  const locale = useLocale();
   const [isGenerating, setIsGenerating] = useState(false);
 
   const generateRandomCombination = () => {
@@ -159,6 +162,10 @@ export default function FoodCombinationGenerator({ onGenerate }: FoodCombination
     const categories = Object.keys(foodItems);
     const randomCategory1 = categories[Math.floor(Math.random() * categories.length)];
     const randomCategory2 = categories[Math.floor(Math.random() * categories.length)];
+
+    // Get localized category names
+    const category1 = t(`foodCategories.${randomCategory1}`);
+    const category2 = t(`foodCategories.${randomCategory2}`);
 
     // Select random food items
     const randomFood1 =
@@ -176,8 +183,13 @@ export default function FoodCombinationGenerator({ onGenerate }: FoodCombination
     // Select random form
     const randomForm = forms[Math.floor(Math.random() * forms.length)];
 
-    // Generate combination
-    const combination = `${randomMethod} ${randomFood1} and ${randomFood2} ${randomForm}`;
+    // Generate combination using template from translation file
+    const combination = t('generator.combinationTemplate', {
+      method: randomMethod,
+      food1: randomFood1,
+      food2: randomFood2,
+      form: randomForm,
+    });
 
     // Deliver result after a slight delay (for generation effect)
     setTimeout(() => {
@@ -188,10 +200,8 @@ export default function FoodCombinationGenerator({ onGenerate }: FoodCombination
 
   return (
     <div className="bg-light p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-2xl font-bold text-dark mb-4">Food Combination Generator</h2>
-      <p className="mb-4 text-gray-700">
-        Click the button to generate an unexpected food combination!
-      </p>
+      <h2 className="text-2xl font-bold text-dark mb-4">{t('generator.title')}</h2>
+      <p className="mb-4 text-gray-700">{t('generator.description')}</p>
 
       <button
         onClick={generateRandomCombination}
@@ -200,7 +210,7 @@ export default function FoodCombinationGenerator({ onGenerate }: FoodCombination
           isGenerating ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-opacity-80'
         }`}
       >
-        {isGenerating ? 'Generating...' : 'Generate Random Combination'}
+        {isGenerating ? t('generator.generating') : t('generator.button')}
       </button>
     </div>
   );

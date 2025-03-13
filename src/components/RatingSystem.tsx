@@ -1,12 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface RatingSystemProps {
   onRate: (rating: number) => void;
 }
 
 export default function RatingSystem({ onRate }: RatingSystemProps) {
+  const t = useTranslations();
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -28,20 +30,20 @@ export default function RatingSystem({ onRate }: RatingSystemProps) {
   };
 
   const ratings = [
-    { value: 1, emoji: '🤢', label: 'Terrible' },
-    { value: 2, emoji: '😕', label: 'Not good' },
-    { value: 3, emoji: '😐', label: 'Okay' },
-    { value: 4, emoji: '😋', label: 'Looks tasty' },
-    { value: 5, emoji: '🤩', label: 'Amazing' },
+    { value: 1, emoji: '🤢', label: t('rating.ratings.1') },
+    { value: 2, emoji: '😕', label: t('rating.ratings.2') },
+    { value: 3, emoji: '😐', label: t('rating.ratings.3') },
+    { value: 4, emoji: '😋', label: t('rating.ratings.4') },
+    { value: 5, emoji: '🤩', label: t('rating.ratings.5') },
   ];
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-2xl font-bold text-dark mb-4">Rate this combination</h2>
+      <h2 className="text-2xl font-bold text-dark mb-4">{t('rating.title')}</h2>
 
       {isSubmitted ? (
         <div className="p-4 bg-green-100 rounded-lg text-center">
-          <p className="text-green-700 font-bold">Thank you for your rating! It has been saved.</p>
+          <p className="text-green-700 font-bold">{t('rating.thankyou')}</p>
         </div>
       ) : (
         <>
@@ -71,7 +73,7 @@ export default function RatingSystem({ onRate }: RatingSystemProps) {
                 : 'bg-primary hover:bg-opacity-80'
             }`}
           >
-            Save Rating
+            {t('rating.button')}
           </button>
         </>
       )}
