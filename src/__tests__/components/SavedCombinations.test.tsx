@@ -67,4 +67,22 @@ describe('SavedCombinations 컴포넌트', () => {
       expect(screen.getByText(`조합 #${index + 1}`)).toBeInTheDocument();
     });
   });
+
+  it('유효하지 않은 평점에 대해 물음표 이모지를 표시해야 함', () => {
+    // 유효하지 않은 평점(0, 6)을 가진 조합 추가
+    const mockCombinations = [
+      { combination: '유효하지 않은 평점 0', rating: 0 },
+      { combination: '유효하지 않은 평점 6', rating: 6 }
+    ];
+    
+    render(<SavedCombinations combinations={mockCombinations} />);
+    
+    // 물음표 이모지가 표시되는지 확인
+    const items = screen.getAllByText('❓');
+    expect(items).toHaveLength(2);
+    
+    // 조합 텍스트가 올바르게 표시되는지 확인
+    expect(screen.getByText('유효하지 않은 평점 0')).toBeInTheDocument();
+    expect(screen.getByText('유효하지 않은 평점 6')).toBeInTheDocument();
+  });
 }); 
