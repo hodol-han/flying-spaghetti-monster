@@ -25,8 +25,8 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-8">
       <header className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-primary mb-2">랜덤 음식 조합 생성기</h1>
-        <p className="text-xl text-dark">상상도 못한 음식 조합을 발견하세요!</p>
+        <h1 className="text-4xl font-bold text-primary mb-2">Random Food Combination Generator</h1>
+        <p className="text-xl text-dark">Discover unexpected food combinations!</p>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

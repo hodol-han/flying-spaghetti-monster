@@ -19,7 +19,7 @@ export default function RatingSystem({ onRate }: RatingSystemProps) {
       onRate(selectedRating);
       setIsSubmitted(true);
 
-      // 3초 후 리셋
+      // Reset after 3 seconds
       setTimeout(() => {
         setSelectedRating(null);
         setIsSubmitted(false);
@@ -28,20 +28,20 @@ export default function RatingSystem({ onRate }: RatingSystemProps) {
   };
 
   const ratings = [
-    { value: 1, emoji: '🤢', label: '끔찍해요' },
-    { value: 2, emoji: '😕', label: '별로예요' },
-    { value: 3, emoji: '😐', label: '그저 그래요' },
-    { value: 4, emoji: '😋', label: '맛있을 것 같아요' },
-    { value: 5, emoji: '🤩', label: '환상적이에요' },
+    { value: 1, emoji: '🤢', label: 'Terrible' },
+    { value: 2, emoji: '😕', label: 'Not good' },
+    { value: 3, emoji: '😐', label: 'Okay' },
+    { value: 4, emoji: '😋', label: 'Looks tasty' },
+    { value: 5, emoji: '🤩', label: 'Amazing' },
   ];
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-2xl font-bold text-dark mb-4">이 조합을 평가해보세요</h2>
+      <h2 className="text-2xl font-bold text-dark mb-4">Rate this combination</h2>
 
       {isSubmitted ? (
         <div className="p-4 bg-green-100 rounded-lg text-center">
-          <p className="text-green-700 font-bold">평가해주셔서 감사합니다! 저장되었습니다.</p>
+          <p className="text-green-700 font-bold">Thank you for your rating! It has been saved.</p>
         </div>
       ) : (
         <>
@@ -71,7 +71,7 @@ export default function RatingSystem({ onRate }: RatingSystemProps) {
                 : 'bg-primary hover:bg-opacity-80'
             }`}
           >
-            평가 저장하기
+            Save Rating
           </button>
         </>
       )}

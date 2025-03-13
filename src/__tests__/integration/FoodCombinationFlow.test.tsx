@@ -2,85 +2,85 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Home from '@/app/page';
 
-describe('음식 조합 생성 및 평가 흐름', () => {
+describe('Food Combination Generation and Rating Flow', () => {
   beforeEach(() => {
-    // 각 테스트 전에 모의 함수 초기화
+    // Initialize mock functions before each test
     jest.clearAllMocks();
 
-    // Jest의 타이머 모의 설정
+    // Set up Jest's mock timers
     jest.useFakeTimers();
   });
 
   afterEach(() => {
-    // 실제 타이머로 복원
+    // Restore real timers
     jest.useRealTimers();
   });
 
-  it('전체 흐름: 조합 생성 -> 평가 -> 저장', async () => {
+  it('Complete flow: Generate combination -> Rate -> Save', async () => {
     render(<Home />);
 
-    // 1. 초기 상태 확인
-    expect(screen.getByText('랜덤 음식 조합 생성기')).toBeInTheDocument();
-    expect(screen.getByText('상상도 못한 음식 조합을 발견하세요!')).toBeInTheDocument();
-    expect(screen.getByText('랜덤 조합 생성하기')).toBeInTheDocument();
-    expect(screen.getByText('아직 저장된 음식 조합이 없습니다.')).toBeInTheDocument();
+    // 1. Check initial state
+    expect(screen.getByText('Random Food Combination Generator')).toBeInTheDocument();
+    expect(screen.getByText('Discover unexpected food combinations!')).toBeInTheDocument();
+    expect(screen.getByText('Generate Random Combination')).toBeInTheDocument();
+    expect(screen.getByText('No saved food combinations yet.')).toBeInTheDocument();
 
-    // 2. 조합 생성 버튼 클릭
-    fireEvent.click(screen.getByText('랜덤 조합 생성하기'));
+    // 2. Click generate combination button
+    fireEvent.click(screen.getByText('Generate Random Combination'));
 
-    // 생성 중 상태 확인
-    expect(screen.getByText('생성 중...')).toBeInTheDocument();
+    // Check generating state
+    expect(screen.getByText('Generating...')).toBeInTheDocument();
 
-    // 타이머 진행
+    // Advance timer
     jest.advanceTimersByTime(800);
 
-    // 3. 생성된 조합 확인
+    // 3. Check generated combination
     await waitFor(() => {
-      expect(screen.getByText('생성된 음식 조합')).toBeInTheDocument();
+      expect(screen.getByText('Generated Food Combination')).toBeInTheDocument();
     });
 
-    // 4. 평가 시스템 확인
-    expect(screen.getByText('이 조합을 평가해보세요')).toBeInTheDocument();
-    expect(screen.getByText('끔찍해요')).toBeInTheDocument();
-    expect(screen.getByText('환상적이에요')).toBeInTheDocument();
+    // 4. Check rating system
+    expect(screen.getByText('Rate this combination')).toBeInTheDocument();
+    expect(screen.getByText('Terrible')).toBeInTheDocument();
+    expect(screen.getByText('Amazing')).toBeInTheDocument();
 
-    // 5. 평가 선택
-    fireEvent.click(screen.getByText('맛있을 것 같아요'));
+    // 5. Select rating
+    fireEvent.click(screen.getByText('Looks tasty'));
 
-    // 6. 평가 저장
-    fireEvent.click(screen.getByText('평가 저장하기'));
+    // 6. Save rating
+    fireEvent.click(screen.getByText('Save Rating'));
 
-    // 7. 감사 메시지 확인
-    expect(screen.getByText('평가해주셔서 감사합니다! 저장되었습니다.')).toBeInTheDocument();
+    // 7. Check thank you message
+    expect(screen.getByText('Thank you for your rating! It has been saved.')).toBeInTheDocument();
 
-    // 8. 저장된 조합 목록 확인
-    expect(screen.queryByText('아직 저장된 음식 조합이 없습니다.')).not.toBeInTheDocument();
-    expect(screen.getByText('조합 #1')).toBeInTheDocument();
+    // 8. Check saved combinations list
+    expect(screen.queryByText('No saved food combinations yet.')).not.toBeInTheDocument();
+    expect(screen.getByText('Combination #1')).toBeInTheDocument();
 
-    // 9. 다시 조합 생성
-    // 3초 진행하여 평가 폼 리셋
+    // 9. Generate combination again
+    // Advance 3 seconds to reset rating form
     jest.advanceTimersByTime(3000);
 
-    // 다시 버튼 클릭
+    // Click button again
     await waitFor(() => {
-      expect(screen.getByText('랜덤 조합 생성하기')).toBeInTheDocument();
+      expect(screen.getByText('Generate Random Combination')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('랜덤 조합 생성하기'));
+    fireEvent.click(screen.getByText('Generate Random Combination'));
 
-    // 타이머 진행
+    // Advance timer
     jest.advanceTimersByTime(800);
 
-    // 10. 두 번째 조합 평가
+    // 10. Rate second combination
     await waitFor(() => {
-      expect(screen.getByText('생성된 음식 조합')).toBeInTheDocument();
+      expect(screen.getByText('Generated Food Combination')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('환상적이에요'));
-    fireEvent.click(screen.getByText('평가 저장하기'));
+    fireEvent.click(screen.getByText('Amazing'));
+    fireEvent.click(screen.getByText('Save Rating'));
 
-    // 11. 두 개의 저장된 조합 확인
-    expect(screen.getByText('조합 #1')).toBeInTheDocument();
-    expect(screen.getByText('조합 #2')).toBeInTheDocument();
+    // 11. Check two saved combinations
+    expect(screen.getByText('Combination #1')).toBeInTheDocument();
+    expect(screen.getByText('Combination #2')).toBeInTheDocument();
   });
 });
