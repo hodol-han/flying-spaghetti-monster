@@ -1,15 +1,15 @@
 const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
-  // next.config.js와 .env 파일이 있는 위치를 지정합니다
+  // Specify the location of next.config.js and .env files
   dir: './',
 });
 
-// Jest에 전달할 사용자 정의 설정
+// Custom configuration to pass to Jest
 const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleNameMapper: {
-    // 별칭 처리 (tsconfig.json의 paths와 일치해야 함)
+    // Handle aliases (should match paths in tsconfig.json)
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   testEnvironment: 'jest-environment-jsdom',
@@ -23,5 +23,5 @@ const customJestConfig = {
   ],
 };
 
-// createJestConfig는 next/jest가 비동기 설정을 제공할 수 있도록 하는 함수입니다
+// createJestConfig is a function that allows next/jest to provide async configuration
 module.exports = createJestConfig(customJestConfig);
